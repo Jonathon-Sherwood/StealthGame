@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    //Sets the game manager as a static instance that cannot be edited.
     private static GameManager instance;
     public static GameManager Instance
     {
@@ -13,8 +14,10 @@ public class GameManager : MonoBehaviour
         }
     }
     public GameObject player; //Allows the designer to assign the player object in inspector.
-    public Canvas canvas;
+    public GameObject titleCanvas; //Allows the designer to assign the title canvas.
+    public GameObject uiCanvas; //Allows the designer to assign the ui canvas.
 
+    //Sets the game manager to a singleton.
     private void Awake()
     {
         if (instance == null)
@@ -29,11 +32,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Called on button press to begin game.
     public void StartGame()
     {
         Debug.Log("Game Has Started");
-        canvas.gameObject.SetActive(false);
+        titleCanvas.gameObject.SetActive(false);
         player.gameObject.SetActive(true);
+        uiCanvas.gameObject.SetActive(true);
     }
 
 }
