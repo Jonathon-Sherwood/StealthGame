@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Called on button press to begin game.
+    //Called on button press to begin game by hiding the title screen and showing UI and player.
     public void StartGame()
     {
         Debug.Log("Game Has Started");
