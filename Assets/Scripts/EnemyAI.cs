@@ -124,7 +124,7 @@ public class EnemyAI : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle + 270));
         //Roatate current game object to face the target using a slerp function which adds some smoothing to the move
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotateSpeed * Time.deltaTime);
-        if (!CanHear(GameManager.Instance.player))
+        if (!CanHear(GameManager.Instance.player) && transform.rotation == rotation)
         {
             ChangeState("Idle");
         }
