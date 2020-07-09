@@ -128,9 +128,10 @@ public class GameManager : MonoBehaviour
 
     public void SpawnPlayer()
     {
-        //Add the player to the world.
+        //Add the player to the world and removes a life.
         if(player == null)
         player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
+        playerLives--;
 
         if (playerDeathScreen.activeSelf)
         {
