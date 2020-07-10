@@ -210,6 +210,7 @@ public class EnemyAI : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Destroy(collision.gameObject);
+            AudioManager.instance.Stop("Moving"); //Cancels the player's movement sound on death.
             ChangeState("Idle");
         }
     }

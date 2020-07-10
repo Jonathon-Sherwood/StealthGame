@@ -46,7 +46,7 @@ public class AudioManager : MonoBehaviour
         s.source.Play();
     }
 
-    //Creates a function that can be called in scripts to play Audiomanager's clips.
+    //Creates a function that can be called in scripts to stop Audiomanager's clips.
     public void Stop(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);

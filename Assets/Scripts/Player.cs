@@ -13,12 +13,14 @@ public class Player : MonoBehaviour
     private NoiseMaker noiseMaker;
     private Animator anim; //Assigns the variable to this object's animator.
     private bool soundOn;
+    [HideInInspector] public bool carrying;
 
     // Start is called before the first frame update
     void Start()
     {
         //Links this object to GameManager
         GameManager.Instance.player = this.gameObject;
+        anim = GetComponent<Animator>();
         tf = gameObject.GetComponent<Transform>();
         noiseMaker = GetComponent<NoiseMaker>();
         noiseMaker.maxVolume = noiseMaker.volumeDistance;
@@ -55,6 +57,7 @@ public class Player : MonoBehaviour
         {
             tf.position += tf.up * currentSpeed * Time.deltaTime;
             moving = true;
+            anim.SetBool("Moving", true);
             if (!soundOn)
             {
                 AudioManager.instance.Play("Moving");
@@ -62,6 +65,7 @@ public class Player : MonoBehaviour
             }
         } else
         {
+            anim.SetBool("Moving", false);
             AudioManager.instance.Stop("Moving");
             soundOn = false;
             moving = false;
