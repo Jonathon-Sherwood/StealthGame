@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
         }
     }
     [HideInInspector] public GameObject player; //Allows the designer to assign the player object in inspector.
+    public Player playerController;
     public GameObject playerPrefab; //Allows the player to be respawned from the prefab list.
     public GameObject titleCanvas; //Allows the designer to assign the title canvas.
     public GameObject uiCanvas; //Allows the designer to assign the ui canvas.
@@ -44,6 +45,11 @@ public class GameManager : MonoBehaviour
     public void Update()
     {
         StateMachine();
+
+        if(player != null)
+        {
+            playerController = player.GetComponent<Player>();
+        }
     }
 
     public void StateMachine()

@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     private Transform tf; //Allows for shorthand throughout code.
     public float turnSpeed = 1f; //Degrees per second.
     public float moveSpeed = 5; //World Space Units per second.
+    public float carrySpeed;
+    [HideInInspector] public float currentSpeed;
     private bool moving = false;
     private NoiseMaker noiseMaker;
     private Animator anim; //Assigns the variable to this object's animator.
@@ -20,6 +22,7 @@ public class Player : MonoBehaviour
         tf = gameObject.GetComponent<Transform>();
         noiseMaker = GetComponent<NoiseMaker>();
         noiseMaker.maxVolume = noiseMaker.volumeDistance;
+        currentSpeed = moveSpeed;
     }
 
     // Update is called once per frame.
@@ -50,7 +53,7 @@ public class Player : MonoBehaviour
         //Move player forward relative to direction facing.
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
-            tf.position += tf.up * moveSpeed * Time.deltaTime;
+            tf.position += tf.up * currentSpeed * Time.deltaTime;
             moving = true;
             if (!soundOn)
             {
