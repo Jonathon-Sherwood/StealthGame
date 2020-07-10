@@ -16,7 +16,9 @@ public class EnemyAI : MonoBehaviour
     private Transform currentPoint;
     private int pointSelection;
     private bool canMove = true; //Allows the coroutine to pause platforms.
+    private bool soundOn;
     public string gameState = "Idle";
+    public LayerMask layerMask;
 
     private void Start()
     {
@@ -26,7 +28,6 @@ public class EnemyAI : MonoBehaviour
     private void Update()
     {
         StateMachine();
-        print(CanHear(GameManager.Instance.player));
 
     }
 
@@ -82,26 +83,53 @@ public class EnemyAI : MonoBehaviour
     IEnumerator PauseTime()
     {
         canMove = false;
-        yield return new WaitForSeconds(pauseTime);
+        yield return new WaitForSeconds(Random.Range(0,pauseTime));
         canMove = true;
     }
 
     private void Idle()
     {
+        AudioManager.instance.Stop("Enemy Moving");
+        soundOn = false;
         StartCoroutine(PauseTime());
         ChangeState("Patrol");
     }
 
     private void Patrol()
     {
+
         if (canMove)
         {
-            transform.position = Vector3.MoveTowards(transform.position, currentPoint.position, (moveSpeed *.5f) * Time.deltaTime);
-            transform.up = currentPoint.position - transform.position;
-        }
+            //get the direction of the other object from current object
+            Vector3 dir = currentPoint.position - transform.position;
+            //get the angle from current direction facing to desired target
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            //set the angle into a quaternion + sprite offset depending on initial sprite facing direction
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle + 270));
+            //Roatate current game object to face the target using a slerp function which adds some smoothing to the move
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, (rotateSpeed * .75f) * Time.deltaTime);
 
+            Vector3 vectorToTarget = currentPoint.position - transform.position;
+
+            float angleToTarget = Vector3.Angle(vectorToTarget, transform.up);
+
+
+            //Check if target is within field of view.
+            if (angleToTarget < fieldOfView)
+            {
+                if (!soundOn) //Only enables the sound to be played once.
+                {
+                    AudioManager.instance.Play("Enemy Moving");
+                    soundOn = true;
+                }
+                transform.position = Vector3.MoveTowards(transform.position, currentPoint.position, (moveSpeed * .5f) * Time.deltaTime);
+            }
+        }
+        
         if (transform.position == currentPoint.position)
         {
+            AudioManager.instance.Stop("Enemy Moving");
+            soundOn = false;
             ChangeState("Idle");
             pointSelection++;
 
@@ -110,12 +138,13 @@ public class EnemyAI : MonoBehaviour
                 pointSelection = 0;
             }
             currentPoint = points[pointSelection];
-
         }
     }
     
     private void Search()
     {
+        AudioManager.instance.Stop("Enemy Moving");
+        soundOn = false;
         //get the direction of the other object from current object
         Vector3 dir = hearingPosition - transform.position;
         //get the angle from current direction facing to desired target
@@ -124,6 +153,8 @@ public class EnemyAI : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angle + 270));
         //Roatate current game object to face the target using a slerp function which adds some smoothing to the move
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotateSpeed * Time.deltaTime);
+
+        //Once the enemy can no longer hear the player, they wait long enough to check the area before patrolling.
         if (!CanHear(GameManager.Instance.player) && transform.rotation == rotation)
         {
             ChangeState("Idle");
@@ -140,12 +171,17 @@ public class EnemyAI : MonoBehaviour
         Vector3 directionToLook = targetPosition - transform.position;                          //Creates a variable for a vector between the player and position.
         transform.up = directionToLook;                                                         //Moves the red axis towards the player, which is rotation only.
         transform.position += directionToLook.normalized * moveSpeed * Time.deltaTime;      //Moves the ship towards the player.
-
+        if (!soundOn) //Only enables the sound to be played once.
+        {
+            AudioManager.instance.Play("Enemy Moving");
+            soundOn = true;
+        }
         if (!CanSee(GameManager.Instance.player))
         {
-            
             if ((transform.position - lastSeenPosition).magnitude <= 0.5f)
             {
+                AudioManager.instance.Stop("Enemy Moving");
+                soundOn = false;
                 ChangeState("Idle");
             }
         }
@@ -190,8 +226,7 @@ public class EnemyAI : MonoBehaviour
             if (angleToTarget < fieldOfView)
             {
                 //Using raycast to see if there are obstructions between us and target.
-                RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, vectorToTarget, visionDistance);
-                print(hitInfo);
+                RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, vectorToTarget, visionDistance, layerMask);
                 if (hitInfo.collider.gameObject == target)
                     {
                      lastSeenPosition = target.transform.position;

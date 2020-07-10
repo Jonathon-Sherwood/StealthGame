@@ -45,4 +45,15 @@ public class AudioManager : MonoBehaviour
         }
         s.source.Play();
     }
+
+    //Creates a function that can be called in scripts to play Audiomanager's clips.
+    public void Stop(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Sound: " + name + "not found!");
+        }
+        s.source.Stop();
+    }
 }

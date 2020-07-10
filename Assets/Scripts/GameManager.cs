@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject spawnPoint; //Allows the deseigner to designate a spawn point for player.
     public GameObject playerDeathScreen; //Activates on player death to notify player for respawn.
     public GameObject gameOverScreen; //Activates on all player lives lost to notify of replay.
+    private bool musicOn;
 
     public int playerLives = 3;
 
@@ -141,6 +142,11 @@ public class GameManager : MonoBehaviour
 
     public void Gameplay()
     {
+        if (!musicOn)
+        {
+            AudioManager.instance.Play("Music");
+            musicOn = true;
+        }
         //TODO: Gameplay
     }
 
@@ -148,6 +154,8 @@ public class GameManager : MonoBehaviour
     {
         if (!playerDeathScreen.activeSelf)
         {
+            AudioManager.instance.Stop("Music");
+            musicOn = false;
             playerDeathScreen.SetActive(true);
         }
     }

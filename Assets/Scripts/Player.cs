@@ -8,8 +8,9 @@ public class Player : MonoBehaviour
     public float turnSpeed = 1f; //Degrees per second.
     public float moveSpeed = 5; //World Space Units per second.
     private bool moving = false;
-    public NoiseMaker noiseMaker;
+    private NoiseMaker noiseMaker;
     private Animator anim; //Assigns the variable to this object's animator.
+    private bool soundOn;
 
     // Start is called before the first frame update
     void Start()
@@ -18,16 +19,16 @@ public class Player : MonoBehaviour
         GameManager.Instance.player = this.gameObject;
         tf = gameObject.GetComponent<Transform>();
         noiseMaker = GetComponent<NoiseMaker>();
+        noiseMaker.maxVolume = noiseMaker.volumeDistance;
     }
 
     // Update is called once per frame.
     void Update()
     {
         Movement();
-        print(moving);
         if (moving)
         {
-            noiseMaker.volumeDistance = 10;
+            noiseMaker.volumeDistance = noiseMaker.maxVolume;
         } else
         {
             noiseMaker.volumeDistance = 0;
@@ -51,8 +52,15 @@ public class Player : MonoBehaviour
         {
             tf.position += tf.up * moveSpeed * Time.deltaTime;
             moving = true;
+            if (!soundOn)
+            {
+                AudioManager.instance.Play("Moving");
+                soundOn = true;
+            }
         } else
         {
+            AudioManager.instance.Stop("Moving");
+            soundOn = false;
             moving = false;
         }
     }

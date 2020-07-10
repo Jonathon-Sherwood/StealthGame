@@ -98,7 +98,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnSpeed: 200
   moveSpeed: 9
-  noiseMaker: {fileID: 0}
 --- !u!114 &8784784450585894259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,7 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e97c8171125809f41830360eb36d5072, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volumeDistance: 1
+  volumeDistance: 3
+  maxVolume: 5
 --- !u!50 &8834471687710029780
 Rigidbody2D:
   serializedVersion: 4
