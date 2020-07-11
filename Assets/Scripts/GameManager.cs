@@ -23,9 +23,13 @@ public class GameManager : MonoBehaviour
     public GameObject spawnPoint; //Allows the deseigner to designate a spawn point for player.
     public GameObject playerDeathScreen; //Activates on player death to notify player for respawn.
     public GameObject gameOverScreen; //Activates on all player lives lost to notify of replay.
+    public GameObject collectablePrefab;
+    private int collectableIndex;
+    public List <Transform> collectableSpawnPoint;
     private bool musicOn;
 
     public int playerLives = 3;
+    private int currentLives;
 
     //Sets the game manager to a singleton.
     private void Awake()
@@ -40,6 +44,7 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("Attempted to make a second game manager.");
             Destroy(this.gameObject);
         }
+        currentLives = playerLives;
     }
 
     public void Update()
@@ -72,10 +77,10 @@ public class GameManager : MonoBehaviour
         else if (gameState == "Gameplay")
         {
             Gameplay();
-            if(player == null && playerLives > 0)
+            if(player == null && currentLives > 0)
             {
                 ChangeState("Player Death");
-            } else if (player == null && playerLives <= 0)
+            } else if (player == null && currentLives <= 0)
             {
                 ChangeState("Game Over");
             }
@@ -131,6 +136,9 @@ public class GameManager : MonoBehaviour
         //TODO: Reset variables in Initialize Game
         titleCanvas.SetActive(false);
         uiCanvas.SetActive(true);
+        currentLives = playerLives;
+        foreach(Transform spawnPoint in collectableSpawnPoint)
+        Instantiate(collectablePrefab, spawnPoint);
     }
 
     public void SpawnPlayer()
@@ -138,7 +146,7 @@ public class GameManager : MonoBehaviour
         //Add the player to the world and removes a life.
         if(player == null)
         player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
-        playerLives--;
+        currentLives--;
 
         if (playerDeathScreen.activeSelf)
         {
@@ -168,6 +176,9 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        AudioManager.instance.Stop("Music");
+        musicOn = false;
+
         if (!gameOverScreen.activeSelf)
         {
             gameOverScreen.SetActive(true);

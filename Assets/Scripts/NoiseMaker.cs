@@ -6,4 +6,9 @@ public class NoiseMaker : MonoBehaviour
 {
     [HideInInspector]public float volumeDistance;
     public float maxVolume;
+
+    private void Update()
+    {
+        print(volumeDistance);
+    }
 }

@@ -27,8 +27,12 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
+        print(CanHear(GameManager.Instance.player));
         StateMachine();
-
+        if(GameManager.Instance.gameState == "Spawn Player")
+        {
+            transform.position = currentPoint.transform.position;
+        }
     }
 
     public void StateMachine()
@@ -194,6 +198,11 @@ public class EnemyAI : MonoBehaviour
         //Get the target's noise maker if they have one.
         NoiseMaker targetNoiseMaker = target.GetComponent<NoiseMaker>();
         if(targetNoiseMaker == null) { return false; }
+
+        if (targetNoiseMaker.volumeDistance == 0)
+        {
+            return false;
+        }
 
         //If the distance from target is less than the noise/hearing distance, we can hear it.
         float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
