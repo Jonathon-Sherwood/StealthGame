@@ -157,6 +157,46 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 817435172865164291, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2212788864662307254, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 519420031}
+    - target: {fileID: 3623287242197590689, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623287242197590689, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623287242197590689, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6068153274844117605, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 16.46669
+      objectReference: {fileID: 0}
+    - target: {fileID: 6068153274844117605, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 16.46669
+      objectReference: {fileID: 0}
+    - target: {fileID: 6068153274844117605, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 16.46669
+      objectReference: {fileID: 0}
     - target: {fileID: 8331474072157318492, guid: a87bb09e4d7678441aa5d75012eb8f06,
         type: 3}
       propertyPath: m_Name
@@ -217,10 +257,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8331474072366066648, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8331474072366066648, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: m_SleepingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8331474072366066653, guid: a87bb09e4d7678441aa5d75012eb8f06,
         type: 3}
       propertyPath: hearingDistance
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8331474072366066653, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: visionDistance
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8331474072366066653, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 1811
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a87bb09e4d7678441aa5d75012eb8f06, type: 3}

@@ -27,7 +27,6 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        print(CanHear(GameManager.Instance.player));
         StateMachine();
         if(GameManager.Instance.gameState == "Spawn Player")
         {
@@ -237,11 +236,13 @@ public class EnemyAI : MonoBehaviour
             {
                 //Using raycast to see if there are obstructions between us and target.
                 RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, vectorToTarget, visionDistance, layerMask);
+
                 if (hitInfo.collider.gameObject == target)
                     {
                      lastSeenPosition = target.transform.position;
                      return true;
                     }
+            else { return false; }
             }
 
 
