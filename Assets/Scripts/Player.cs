@@ -7,18 +7,18 @@ public class Player : MonoBehaviour
     private Transform tf; //Allows for shorthand throughout code.
     public float turnSpeed = 1f; //Degrees per second.
     public float moveSpeed = 5; //World Space Units per second.
-    public float carrySpeed;
-    [HideInInspector] public float currentSpeed;
-    private bool moving = false;
-    private NoiseMaker noiseMaker;
+    public float carrySpeed; //Different adjustable speed for when the player is carrying a collectable.
+    [HideInInspector] public float currentSpeed; //Used to change the player's speed through different variables.
+    private bool moving = false; //Bool used for causing noise or not.
+    private NoiseMaker noiseMaker; //Detects attached noisemaker for editing.
     private Animator anim; //Assigns the variable to this object's animator.
-    private bool soundOn;
-    [HideInInspector] public bool carrying;
+    private bool soundOn; //Used for only turning on the looping sound once.
+    [HideInInspector] public bool carrying; //Bool used for speed changes when carrying a collectable.
 
     // Start is called before the first frame update
     void Start()
     {
-        //Links this object to GameManager
+        //Links this object to its components.
         GameManager.Instance.player = this.gameObject;
         anim = GetComponent<Animator>();
         tf = gameObject.GetComponent<Transform>();
@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
     void Update()
     {
         Movement();
+
+        //Sets noisemaker's volume to on or off based on movement.
         if (moving)
         {
             noiseMaker.volumeDistance = noiseMaker.maxVolume;
@@ -75,7 +77,7 @@ public class Player : MonoBehaviour
 
     private void OnDestroy()
     {
-        //Removes this gameobject to the Game Manager's list of existing Asteroids on destruction.
+        //Removes this gameobject from the Game Manager's player on destruction.
         GameManager.Instance.player = null;
     }
 }

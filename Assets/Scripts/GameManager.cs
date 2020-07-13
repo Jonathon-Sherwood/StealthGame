@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,20 +17,21 @@ public class GameManager : MonoBehaviour
         }
     }
     [HideInInspector] public GameObject player; //Allows the designer to assign the player object in inspector.
-    public Player playerController;
+    public Player playerController; //Detects player controller for editing.
     public GameObject playerPrefab; //Allows the player to be respawned from the prefab list.
     public GameObject titleCanvas; //Allows the designer to assign the title canvas.
     public GameObject uiCanvas; //Allows the designer to assign the ui canvas.
     public GameObject spawnPoint; //Allows the deseigner to designate a spawn point for player.
     public GameObject playerDeathScreen; //Activates on player death to notify player for respawn.
     public GameObject gameOverScreen; //Activates on all player lives lost to notify of replay.
-    public GameObject collectablePrefab;
-    private int collectableIndex;
-    public List <Transform> collectableSpawnPoint;
-    private bool musicOn;
+    public GameObject collectablePrefab; //Assignable variable for different collectables.
+    public Text livesText; //Allows the game manager to adjust the UI lives indicator.
+    private int collectableIndex; //Used for the collectable list to check specific list spot.
+    public List <Transform> collectableSpawnPoint; //Allows the designer to add and set locations for collectables.
+    private bool musicOn; //Bool used to play music only once.
 
-    public int playerLives = 3;
-    private int currentLives;
+    public int playerLives = 3; //Adjustable variable for number of player lives.
+    private int currentLives; //Placeholder for the lives the player has after dying.
 
     //Sets the game manager to a singleton.
     private void Awake()
@@ -51,12 +53,16 @@ public class GameManager : MonoBehaviour
     {
         StateMachine();
 
+        //Displays the current amount of lives to the player in the UI.
+        livesText.text = "X " + (currentLives + 1);
+
         if(player != null)
         {
             playerController = player.GetComponent<Player>();
         }
     }
 
+    //Used to switch between states based on transitions.
     public void StateMachine()
     {
         if (gameState == "Start Screen")
@@ -107,6 +113,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Used for quicker changing between states through other methods.
     public void ChangeState(string newState)
     {
         gameState = newState;
@@ -118,6 +125,7 @@ public class GameManager : MonoBehaviour
         ChangeState("Initialize Game");
     }
 
+    //Turns off all input except the start screen when on the title screen.
     public void StartScreen()
     {
         if (!titleCanvas.activeSelf)
@@ -131,9 +139,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Turns off title screen and turns on the UI when gameplay begins. Spawns collectables.
     public void InitializeGame()
     {
-        //TODO: Reset variables in Initialize Game
         titleCanvas.SetActive(false);
         uiCanvas.SetActive(true);
         currentLives = playerLives;
@@ -141,9 +149,9 @@ public class GameManager : MonoBehaviour
         Instantiate(collectablePrefab, spawnPoint);
     }
 
+    //Add the player to the world and removes a life.
     public void SpawnPlayer()
     {
-        //Add the player to the world and removes a life.
         if(player == null)
         player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
         currentLives--;
@@ -154,6 +162,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //State used for actual gameplay.
     public void Gameplay()
     {
         if (!musicOn)
@@ -161,9 +170,9 @@ public class GameManager : MonoBehaviour
             AudioManager.instance.Play("Music");
             musicOn = true;
         }
-        //TODO: Gameplay
     }
 
+    //Turns on the death canvas and cancels music.
     public void PlayerDeath()
     {
         if (!playerDeathScreen.activeSelf)
@@ -174,6 +183,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Once player runs out of lives, display game over screen and allow restart.
     public void GameOver()
     {
         AudioManager.instance.Stop("Music");
