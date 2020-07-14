@@ -24,13 +24,17 @@ public class GameManager : MonoBehaviour
     public GameObject spawnPoint; //Allows the deseigner to designate a spawn point for player.
     public GameObject playerDeathScreen; //Activates on player death to notify player for respawn.
     public GameObject gameOverScreen; //Activates on all player lives lost to notify of replay.
+    public GameObject victoryCanvas; //Displays when the player has beaten the game.
     public GameObject collectablePrefab; //Assignable variable for different collectables.
     public Text livesText; //Allows the game manager to adjust the UI lives indicator.
+    public Text collectableText; //Allows the game manager to adjust the UI collectables indicator.
     private int collectableIndex; //Used for the collectable list to check specific list spot.
     public List <Transform> collectableSpawnPoint; //Allows the designer to add and set locations for collectables.
     private bool musicOn; //Bool used to play music only once.
 
     public int playerLives = 3; //Adjustable variable for number of player lives.
+    [HideInInspector]public int currentCollectables; //Shows how many items the player has collected.
+    [HideInInspector]public int maxCollectables; //Used for declaring when the game is complete.
     private int currentLives; //Placeholder for the lives the player has after dying.
 
     //Sets the game manager to a singleton.
@@ -56,7 +60,10 @@ public class GameManager : MonoBehaviour
         //Displays the current amount of lives to the player in the UI.
         livesText.text = "X " + (currentLives + 1);
 
-        if(player != null)
+        //Displays the current amount of collected items to the player in the UI.
+        collectableText.text = currentCollectables + " / " + maxCollectables;
+
+        if (player != null)
         {
             playerController = player.GetComponent<Player>();
         }
@@ -107,6 +114,14 @@ public class GameManager : MonoBehaviour
                 ChangeState("Start Screen");
             }
         }
+        else if(gameState == "Victory")
+        {
+            Victory();
+            if (Input.anyKeyDown)
+            {
+                ChangeState("Start Screen");
+            }
+        }
         else
         {
             Debug.LogWarning("Game Manager tried to change to non existent state: " + gameState);
@@ -137,6 +152,11 @@ public class GameManager : MonoBehaviour
         {
             gameOverScreen.SetActive(false);
         }
+
+        if (victoryCanvas.activeSelf)
+        {
+            victoryCanvas.SetActive(false);
+        }
     }
 
     //Turns off title screen and turns on the UI when gameplay begins. Spawns collectables.
@@ -145,8 +165,11 @@ public class GameManager : MonoBehaviour
         titleCanvas.SetActive(false);
         uiCanvas.SetActive(true);
         currentLives = playerLives;
-        foreach(Transform spawnPoint in collectableSpawnPoint)
-        Instantiate(collectablePrefab, spawnPoint);
+        foreach (Transform spawnPoint in collectableSpawnPoint)
+        {
+            maxCollectables++;
+            Instantiate(collectablePrefab, spawnPoint);
+        }
     }
 
     //Add the player to the world and removes a life.
@@ -170,6 +193,13 @@ public class GameManager : MonoBehaviour
             AudioManager.instance.Play("Music");
             musicOn = true;
         }
+
+        if(currentCollectables == maxCollectables)
+        {
+            AudioManager.instance.Play("Victory");
+            ChangeState("Victory");
+        }
+
     }
 
     //Turns on the death canvas and cancels music.
@@ -187,11 +217,33 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         AudioManager.instance.Stop("Music");
+        AudioManager.instance.Stop("Enemy Moving");
         musicOn = false;
 
         if (!gameOverScreen.activeSelf)
         {
             gameOverScreen.SetActive(true);
+        }
+
+        if (uiCanvas.activeSelf)
+        {
+            uiCanvas.SetActive(false);
+        }
+    }
+
+    public void Victory()
+    {
+        AudioManager.instance.Stop("Moving");
+        AudioManager.instance.Stop("Enemy Moving");
+        AudioManager.instance.Stop("Music");
+        musicOn = false;
+
+        if (player != null)
+        Destroy(player.gameObject);
+        
+        if (!victoryCanvas.activeSelf)
+        {
+            victoryCanvas.SetActive(true);
         }
 
         if (uiCanvas.activeSelf)

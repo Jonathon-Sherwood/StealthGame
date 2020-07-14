@@ -24,15 +24,18 @@ public class Collectable : MonoBehaviour
         //When this touches the spawn point, the item is destroyed to mark it as collected.
         if (collision.transform.tag == "Spawn")
         {
+            AudioManager.instance.Play("Score");
             GameManager.Instance.playerController.carrying = false;
             GameManager.Instance.playerController.currentSpeed = GameManager.Instance.playerController.moveSpeed;
             GameManager.Instance.playerController.turnSpeed = GameManager.Instance.playerController.turnSpeed * 2f;
+            GameManager.Instance.currentCollectables++;
             Destroy(this.gameObject);
         }
 
         //Slows the player down and marks this as attached to the players mouth.
         if (collision.transform.tag == "Player" && !GameManager.Instance.playerController.carrying && attached == false)
         {
+            AudioManager.instance.Play("Crunch");
             attached = true;
             GameManager.Instance.playerController.currentSpeed = GameManager.Instance.playerController.carrySpeed;
             GameManager.Instance.playerController.turnSpeed = GameManager.Instance.playerController.turnSpeed * .5f;
