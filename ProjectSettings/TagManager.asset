@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Spawn
   - Enemy
+  - Corpse
+  - Collectable
   layers:
   - Default
   - TransparentFX

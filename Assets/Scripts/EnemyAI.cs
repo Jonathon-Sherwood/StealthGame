@@ -17,8 +17,10 @@ public class EnemyAI : MonoBehaviour
     private int pointSelection; //Holds the current value within the list of points. 
     private bool canMove = true; //Allows the coroutine to pause platforms.
     private bool soundOn; //Used to turn on sound for movement only a single time for looping.
+    [HideInInspector]public bool corpseSpawned; //Stops the corpse from being spawned more than once per death.
     [HideInInspector]public string gameState = "Idle"; //Sets the gamestate based on a list of conditions.
     public LayerMask layerMask; //Stops objects like spawnpoints and patrol points from blocking the enemy's LOS or FOV.
+    public GameObject corpsePrefab; //Spawns a corpse on the player's last position on death.
 
     private void Start()
     {
@@ -230,8 +232,16 @@ public class EnemyAI : MonoBehaviour
         //Destroys the player on contact.
         if (collision.gameObject.CompareTag("Player"))
         {
+            //Spawns a corpse on the player after destroying them.
+            if (corpseSpawned == false)
+            {
+                Instantiate(corpsePrefab, collision.transform.position, collision.transform.rotation);
+                corpseSpawned = true;
+            }
+            AudioManager.instance.Play("Squish");
             Destroy(collision.gameObject);
             AudioManager.instance.Stop("Moving"); //Cancels the player's movement sound on death.
+            AudioManager.instance.Stop("Enemy Moving"); //Cancels the enemy's movement sound on death.
             ChangeState("Idle");
         }
     }

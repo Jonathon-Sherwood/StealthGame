@@ -169,7 +169,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f07a4a398a04bc74d8795f5a5ad91938, type: 3}
-  m_Color: {r: 1, g: 0.988338, b: 0, a: 0.35686275}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.35686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -353,6 +353,8 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1843
+  corpsePrefab: {fileID: 574668961342207075, guid: b39ab60d83b4b234eb62f4f8e123855d,
+    type: 3}
 --- !u!58 &8331474072366066649
 CircleCollider2D:
   m_ObjectHideFlags: 0

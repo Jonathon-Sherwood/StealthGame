@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour
     private int collectableIndex; //Used for the collectable list to check specific list spot.
     public List <Transform> collectableSpawnPoint; //Allows the designer to add and set locations for collectables.
     private bool musicOn; //Bool used to play music only once.
-
     public int playerLives = 3; //Adjustable variable for number of player lives.
     [HideInInspector]public int currentCollectables; //Shows how many items the player has collected.
     [HideInInspector]public int maxCollectables; //Used for declaring when the game is complete.
@@ -143,6 +142,8 @@ public class GameManager : MonoBehaviour
     //Turns off all input except the start screen when on the title screen.
     public void StartScreen()
     {
+        Time.timeScale = 0;
+
         if (!titleCanvas.activeSelf)
         {
             titleCanvas.SetActive(true);
@@ -162,9 +163,23 @@ public class GameManager : MonoBehaviour
     //Turns off title screen and turns on the UI when gameplay begins. Spawns collectables.
     public void InitializeGame()
     {
+        Time.timeScale = 1f;
         titleCanvas.SetActive(false);
         uiCanvas.SetActive(true);
         currentLives = playerLives;
+        maxCollectables = 0;
+        currentCollectables = 0;
+
+        foreach (GameObject collectable in GameObject.FindGameObjectsWithTag("Collectable"))
+        {
+            Destroy(collectable.gameObject);
+        }
+
+        foreach (GameObject corpse in GameObject.FindGameObjectsWithTag("Corpse"))
+        {
+            Destroy(corpse.gameObject);
+        }
+
         foreach (Transform spawnPoint in collectableSpawnPoint)
         {
             maxCollectables++;
@@ -178,6 +193,8 @@ public class GameManager : MonoBehaviour
         if(player == null)
         player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
         currentLives--;
+
+        FindObjectOfType<EnemyAI>().corpseSpawned = false; //Allows the enemy to spawn more player deaths.
 
         if (playerDeathScreen.activeSelf)
         {

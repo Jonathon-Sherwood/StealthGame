@@ -132,6 +132,8 @@ MonoBehaviour:
   moveSpeed: 9
   carrySpeed: 4
   currentSpeed: 0
+  corpsePrefab: {fileID: 574668961342207075, guid: b39ab60d83b4b234eb62f4f8e123855d,
+    type: 3}
   carrying: 0
 --- !u!114 &8784784450585894259
 MonoBehaviour:

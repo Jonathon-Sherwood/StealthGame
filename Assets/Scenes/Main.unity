@@ -160,7 +160,7 @@ PrefabInstance:
     - target: {fileID: 817435172865164291, guid: a87bb09e4d7678441aa5d75012eb8f06,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2212788864662307254, guid: a87bb09e4d7678441aa5d75012eb8f06,
         type: 3}
@@ -292,6 +292,12 @@ PrefabInstance:
       propertyPath: layerMask.m_Bits
       value: 1811
       objectReference: {fileID: 0}
+    - target: {fileID: 8331474072366066653, guid: a87bb09e4d7678441aa5d75012eb8f06,
+        type: 3}
+      propertyPath: corpsePrefab
+      value: 
+      objectReference: {fileID: 574668961342207075, guid: b39ab60d83b4b234eb62f4f8e123855d,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a87bb09e4d7678441aa5d75012eb8f06, type: 3}
 --- !u!1 &497631239
@@ -6154,6 +6160,14 @@ MonoBehaviour:
     source: {fileID: 0}
   - clip: {fileID: 8300000, guid: 49e1c446e0b933144bbcbb69fc912c5d, type: 3}
     name: Victory
+    volume: 1
+    pitch: 1.84
+    time: 0
+    loop: 0
+    mute: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: b08e900f33ca57c4fa0c973086fb7dff, type: 3}
+    name: Squish
     volume: 1
     pitch: 1.84
     time: 0
